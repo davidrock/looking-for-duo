@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+// model Widget {
+//   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+// }
+
+model Game {
+  id        String @id @default(uuid())
+  title     String
+  bannerUrl String
+
+  Ads Ad[]
+}
+
+model Ad {
+  id              String   @id @default(uuid())
+  name            String
+  yearsPlaying    Int
+  discord         String
+  weekDays        String
+  hourStart       Int
+  hourEnd         Int
+  useVoiceChannel Boolean
+  createdAt       DateTime @default(now())
+
+  game   Game   @relation(fields: [gameId], references: [id])
+  gameId String
+}
